@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="unitstyle.css">
+
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <!-- Default theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+  <!-- Semantic UI theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+  <!-- Bootstrap theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+
+  <title>Unit Master</title>
+</head>
+
+<body>
+  <div id="navbar"></div>
+  <!-- buttons -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add
+  </button>
+  <button onClick="window.location.href=window.location.href" class="btn btn-secondary">Refresh Page</button>
+  <input id="search" type="text" placeholder="Search for name " autocomplete="off">
+
+
+  <!-- table -->
+  <table class="table table-bordered " id="table">
+    <thead>
+      <div class="message-show"></div>
+      <tr>
+        <th scope="col" hidden="">Keycode</th>
+        <th scope="col">Unit Name</th>
+        <th scope="col">Unit Value</th>
+        <th scope="col">Display</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody class="unitmaster">
+
+    </tbody>
+  </table>
+
+
+  <!-- ADD Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content addmodal">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">ADDING DETAILS INTO THE TABLE</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="login-box-msg"></div>
+          <form id="addform" class="form" name="myForm" autocomplete="off">
+            Enter the details below</br><br>
+            <label>Unit Name:</label>
+            <input type="text" placeholder="unitname" id="unitname" name="unitname" required><span
+              id="status"></span></input>
+            <span id="namecheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+
+            <label>Unit Value:</label>
+            <input type="text" placeholder="unitvalue" id="unitvalue" name="unitvalue" required></input>
+            <span id="valuecheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label>Display</label>
+            <input type="text" placeholder="display" id="display" name="display" required></input>
+            <span id="discheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="btnsave">
+            save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Data </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+
+            <div class="col-md-12">
+              <div class="error-message">
+
+              </div>
+            </div>
+
+
+            <input type="text" id="keycode" class="form-control" hidden="">
+
+            <div class="col-md-6">
+              <label for="">Unit Name</label>
+              <input type="text" id="edit_name" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label for="">Unit Value</label>
+              <input type="text" id="edit_value" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label for="">Display</label>
+              <input type="text" id="edit_dis" class="form-control">
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary " id="editsave">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    // adding data into the table
+    $(document).ready(function () {
+      getdata();
+      $("#namecheck").hide();
+      $("#discheck").hide();
+      $("#valuecheck").hide();
+
+
+
+      $('#btnsave').click(function () {
+
+        let id = $("#unitname").val();
+
+        if (id.length == "") {
+          $("#namecheck").show();
+
+          return
+        }
+
+        let uvalue = $("#unitvalue").val();
+
+        if (uvalue.length == "") {
+          $("#valuecheck").show();
+
+          return
+        }
+        let display = $("#display").val();
+
+        if (display.length == "") {
+          $("#discheck").show();
+
+          return
+        }
+        let text = "you want to add this data into database";
+
+        if (confirm(text) == true) {
+          $.ajax({
+            url: 'add.php',
+            type: 'POST',
+            data: {
+              'unitname': $('#unitname').val(),
+              'unitvalue': $('#unitvalue').val(),
+              'display': $('#display').val(),
+
+            },
+
+
+            success: function (data) {
+
+              if (data == 1) {
+                //alert("Data Added Successfully");
+              }
+              else {
+                alert("cancelled");
+              }
+            },
+
+          });
+        } else {
+          alertify.error('Oops!!! you cancelled');
+        }
+
+
+      });
+
+
+      // clear pop up when written something
+      $('#exampleModal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+
+        $("#namecheck").hide();
+        $("#discheck").hide();
+        $("#valuecheck").hide();
+
+      })
+
+
+      // fetch data from the database into table
+      function getdata() {
+        $.ajax({
+          type: "POST",
+          url: "get.php",
+          dataType: 'JSON',
+          success: function (response) {
+
+            $.each(response, function (key, value) {
+
+              $('.unitmaster').append('<tr>' +
+                '<th scope="row" class="keycode" hidden="" >' + value['keycode'] + '</th>\
+            <td class="unitname">'+ value['unitname'] + '</td>\
+            <td class="unitvalue" >'+ value['unitvalue'] + '</td>\
+            <td class="display">'+ value['display'] + '</td>\
+           <td><button type="button" class="btn btn-primary  edit_btn "style="background-color:green"  >\
+                Edit </button></td>\
+              <td><button type="button" class="btn btn-danger deletebtn">\
+                Delete </button></td>\
+              </tr>');
+
+            });
+          }
+
+
+        });
+      }
+
+      // deleting data from the table
+      $(document).on("click", ".deletebtn", function () {
+        var keycode = $(this).closest('tr').find('.keycode').text();
+        let text = "you want to delete this data from database";
+        if (confirm(text) == true) {
+          $.ajax({
+            type: "POST",
+            url: "delete.php",
+
+            data: {
+
+              'keycode': keycode,
+            },
+            success: function (response) {
+              console.log(response);
+              if (response == 1) {
+
+
+                alertify.success('Data Deleted Successfully');
+                $('.unitmaster').html('');
+                getdata();
+              }
+            }
+
+          });
+        } else {
+          alertify.error('Oops!!! you cancelled');
+        }
+
+
+      });
+
+      // fetch data for edit button
+      $(document).on("click", ".edit_btn", function () {
+
+
+        var unitname = $(this).closest('tr').find('.unitname').text();
+        var unitvalue = $(this).closest('tr').find('.unitvalue').text();
+        var display = $(this).closest('tr').find('.display').text();
+        var keycode = $(this).closest('tr').find('.keycode').text();
+
+
+        $('#edit_name').val(unitname);
+        $('#edit_value').val(unitvalue);
+        $('#edit_dis').val(display);
+        $('#keycode').val(keycode);
+
+        $('#EditModal').modal('show');
+      });
+
+
+
+      // edit modal function
+      $('#editsave').click(function () {
+        // var keycode=$(this).closest('tr').find('.keycode').text();
+        alertify.confirm("Update Changes?.",
+          function () {
+            $.ajax({
+              url: 'update.php',
+              type: 'POST',
+
+              data: {
+
+                'unitname': $('#edit_name').val(),
+                'unitvalue': $('#edit_value').val(),
+                'display': $('#edit_dis').val(),
+                'keycode': $('#keycode').val(),
+
+              },
+
+              success: function (data) {
+                // alert(data);
+                if (data == 1) {
+                  // alertalarm();
+                  // alert('data has been updated');
+
+
+                }
+                if (data == 0) {
+                  alert('something went wrong');
+                }
+              },
+
+            });
+            alertify.success('Data Updated');
+          }, function () {
+            alertify.error('Action Cancelled');
+          }).setHeader(' Confirm? ');
+
+
+
+      });
+
+      // search function
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#table tbody tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+
+      $(function () {
+        $("#navbar").load("menu.html");
+      });
+
+    });
+
+  </script>
+</body>
+
+
+</html>

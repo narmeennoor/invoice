@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+   
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>     -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <title>nav bar</title>
+    
+    <link rel="stylesheet" href="menustyle.css">
+</head>
+
+
+<body>
+  <nav class="navbar bg-body-tertiary" style="
+  padding-top: 0px;">
+    <div class="container-fluid" style="border-top-style:solid;border-color: palevioletred;border-top-width:1rem;">
+      <a class="navbar-brand" onclick="openNav()" style="cursor: pointer;border-color: rgb(165, 165, 165);border: solid;border-radius: 0.2rem;padding: 0.3rem;padding-left: 1rem;padding-right: 1rem;">&#9776;</a>
+      <form class="d-flex" role="search">
+        <span style="margin-right: 10px;" id="username" ></span>
+        <a class="btn btn-success" type="submit"  onclick="logoutfunc()" >logout</a>
+      </form>
+    </div>
+  </nav>
+            
+          <nav>
+          
+          <a  href="#"> <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="unitmaster.html">Units Master</a>
+            <a href="ACfiltermodal.html">Product Master</a>
+            <a href="autocompletetesting.html">Invoice</a>
+            <a href="productimgduplicate.html">ProductMaster with images</a>
+           
+          </div>
+          
+
+</body>
+<script>
+    function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+var username = localStorage.getItem("username");
+        console.log(username);
+          var name="welcome " + username;
+          document.getElementById("username").innerHTML = name;
+       // document.getElementById(username).innerHTML=
+    
+    function logoutfunc(){
+        alertify.confirm("Are you sure you want to Logout?",
+  function(){
+    alertify.success('OK logged out');
+    localStorage.clear("username");
+    window.location='index.html';
+  },
+  function(){
+    alertify.error('Cancellll');
+  }).setHeader(' Logout '); ;
+       //alertify.defaults.glossary.title="hi";
+        
+    }
+
+</script>
+</html>

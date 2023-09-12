@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+</head>
+
+<body>
+    <div class="form">
+        <h2 style="color: black;">Signup</h2>
+        <div class="input">
+            <div class="inputBox">
+                <label for="" style="color: black;">Username</label>
+                <input type="text" id="username" autocomplete="off">
+
+                </input>
+                <span id="namecheck" style="color: red;">
+                    **field is required
+                </span>
+            </div>
+
+
+            <div class="inputBox">
+                <label for="" style="color: black;">Password</label>
+                <input type="password" id="password"></input>
+                <span id="passcheck" style="color: red;">
+                    **field is required
+                </span>
+            </div>
+            <div class="inputBox">
+                <label for="" style="color: black;">Confirm Password</label>
+                <input type="password" id="cpassword"></input>
+
+            </div>
+            <div style="margin-top: 7px;" id="CheckPasswordMatch"></div>
+            <div class="inputBox">
+                <label for="" style="color: black;">Email</label>
+                <input type="email" id="email" required autocomplete="off"></input>
+                <span id="emailcheck" style="color: red;">
+                    **field is required
+                </span>
+
+            </div>
+            <div class="inputBox">
+                <label for="" style="color: black;">Phone</label>
+                <input type="text" id="phone" autocomplete="off"><span id="status"></span></input>
+                <span id="phonecheck" style="color: red;">
+                    **field is required
+                </span>
+            </div>
+            <div class="inputBox">
+                <input type="submit" name="" id="btnsave" value="Save" style="width:80px"> <input type="submit" name=""
+                    value="Cancel" style="width:80px"> <input type="submit" name="" value="login"
+                    style="width:80px"></input>
+
+            </div>
+        </div>
+
+
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#namecheck").hide();
+            $("#passcheck").hide();
+            $("#emailcheck").hide();
+            $("#phonecheck").hide();
+
+            $("#phone").change(function () {
+                var phone = $("#phone").val();
+                //alert(phone);
+                $.ajax({
+                    url: 'phonecheck.php',
+                    type: 'POST',
+
+
+                    data: {
+                        'phone': phone,
+                    },
+                    success: function (response) {
+
+                        // alert(phone);
+                        if (response == 0) {
+
+                            //  $('#status').append("it is available");
+                        }
+                        else {
+                            // $("#phonecheck").hide();
+                            $('#status').append("user already exists");
+
+                            // $("#status").hide();
+
+
+                        }
+                    }
+                });
+            });
+
+            $('#btnsave').click(function () {
+               
+
+                //password validation
+                let pass = $("#password").val();
+                let cpass = $('#cpassword').val();
+                if (pass == "" || cpass == "") {
+                    $("#passcheck").show();
+                    $("#cpasscheck").show();
+                }
+                if (pass != cpass) {
+                    $("#CheckPasswordMatch").html("Password does not match !").css("color", "red");
+                }
+                else {
+                    //  $("#CheckPasswordMatch").html("Password match !").css("color","green");
+                }
+
+
+                let name = $("#username").val();
+
+                if (name == "") {
+                    $("#namecheck").show();
+                    return
+                }
+
+
+                let email = $("#email").val();
+
+                if (email == "") {
+                    $("#emailcheck").show();
+                    return
+                }
+                let phone = $("#phone").val();
+
+                if (phone.length == "") {
+                    $("#phonecheck").show();
+                    return
+                }
+
+
+
+                $.ajax({
+                    url: 'adduser.php',
+                    type: 'POST',
+                    
+                    data: {
+
+                        'username': $('#username').val(),
+                        'password': $('#password').val(),
+                        'email': $('#email').val(),
+                        'phone': $('#phone').val(),
+
+
+
+                    },
+
+
+
+                    success: function (data) {
+
+                        if (data==1) {
+                            //$.notify("Access granted", "success");
+                            //alertify.success(' successfully signed in');
+                            alert("you can login now");
+                            window.location.href = "index.html";
+
+                        }
+                        else {
+                            alert("error");
+                        }
+                    },
+                    
+
+                });
+            });
+           
+            localStorage.setItem(username, narmeen)
+            
+        });
+      
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+  <script src="https://kit.fontawesome.com/e30902090a.js" crossorigin="anonymous"></script>
+  <title>image upload</title>
+  <style>
+    body {
+      margin: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <!-- buttons -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add
+  </button>
+  <button onClick="window.location.href=window.location.href" class="btn btn-secondary">Refresh Page</button>
+
+  <input id="search" type="text" placeholder="&#xF002; Search for name" style="font-family: Arial, FontAwesome"></input>
+  <hr>
+  <!-- table -->
+  <table class="table table-bordered " id="table">
+    <thead>
+
+      <tr>
+        <th scope="col">Sl No.</th>
+        <th scope="col">Product Image</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Unit</th>
+        <th scope="col">Selling Price</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody class="productimgmaster">
+    </tbody>
+  </table>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content addmodal">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">ADDING DETAILS INTO THE TABLE</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="login-box-msg"></div>
+          <!-- <form id="addform" class="form" name="myForm" autocomplete="off"> -->
+          <form id="addform" class="form" name="myForm" autocomplete="off" enctype="multipart/form-data">
+            Enter the details below</br><br>
+            <label style="width:12rem;">Product Code:</label>
+            <input type="text" placeholder="Product Code" id="pdcode"><span id="status" required></span></input>
+            <span id="pdcodecheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+
+            <label style="width:12rem;">Product Name:</label>
+            <input type="text" placeholder="Product Name" id="pdname" required></input>
+            <span id="pdnamecheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label style="width:12rem;">Units:</label>
+            <!-- <input type="number" placeholder="units" id="units" name="unitvalue" ></input> -->
+            <select name="units" id="units">
+              <option value="">select option</option>
+            </select>
+            <span id="unitcheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label style="width:12rem;">Selling Price:</label>
+            <input type="number" placeholder="Selling Price" id="sp" required></input>
+            <span id="spcheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label style="width:12rem;">Offer Price:</label>
+            <input type="number" placeholder="Offer Price" id="op" required></input>
+            <span id="opcheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label style="width:12rem;">Product Description:</label>
+            <input type="textarea" placeholder="Product Description" id="pd" required></input>
+            <span id="pdcheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+            <label for="myfile">Select a Display Image:</label>
+            <input type="file" id="myfile" name="myfile" class="custom-file-input">
+            <span id="dpcheck" style="color: red;">
+              **field is required
+            </span><br><br>
+
+
+            <!-- Add More Images -->
+            <label for="myfile">Add More Images:</label>
+            <input type="file" id="myFiles" name="myFiles[]" multiple accept=".jpg, .jpeg, .png"
+              class="custom-file-input" /><br><br>
+            <div id="image-preview" style="display:flex;flex-wrap:wrap"></div>
+            <span id="image-count">0/5 images selected</span>
+            <br><br>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="btnsave">
+            save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Edit modal -->
+  <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Data </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+
+            <form enctype="multipart/form-data" method="post" action="updateimgproduct.php">
+              <input type="text" id="keycode" class="form-control" hidden="">
+
+
+              <div class="col-md-5">
+                <label for="">Product Name</label>
+                <input type="text" id="edit_name" class="form-control">
+              </div><br>
+              <div class="col-md-5">
+                <label for="">Unit</label>
+                <!-- <input type="text" id="edit_unit" class="form-control"> -->
+                <select name="units" id="edit_unit">
+                  <option value="" type="text">select option</option>
+                </select>
+
+              </div><br>
+              <div class="col-md-5">
+                <label for="">Selling Price:</label>
+                <input type="number" id="edit_sp" class="form-control">
+              </div><br>
+
+              <div class="col-md-9">
+                <label for="display_image_preview">Display Image:</label><br>
+
+                <img src="" id="display_image_preview" alt="Display Image" height="100"><br>
+                <input type="file" id="edit_display_image" accept=".jpg, .jpeg, .png" class="custom-file-input" />
+              </div>
+              <div class="col-md-9">
+                <!-- Add More Images in Edit Modal -->
+                <label for="edit-myFiles" class="edit-file-input">Add More Images:</label><br>
+
+                <div id="edit_additional_image-preview" style="display: flex; flex-wrap: wrap;"></div>
+                <input type="file" id="edit-myFiles" name="edit-myFiles[]" multiple accept=".jpg, .jpeg, .png "
+                  class="custom-file-input" /><br><br>
+                <span id="edit_additional_image-count">0/5 images selected</span>
+            </form>
+          </div>
+          <br><br>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary " id="editsave">Update</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+
+    //ading data into the table
+    $(document).ready(function () {
+
+
+      let existingImages = [];
+          // Now you can use the existingImages array elsewhere in your code
+      getdata();
+      loadData();
+      loadeditData();
+      
+      let imagesToDelete = [];
+      let existingImagesCount = 0;
+      // loadeditData();
+      // clear pop up when written something
+      $('#exampleModal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+        $("#pdcodecheck").hide();
+        $("#pdnamecheck").hide();
+        $("#unitcheck").hide();
+        $("#spcheck").hide();
+        $("#opcheck").hide();
+        $("#pdcheck").hide();
+        $("#dpcheck").hide();
+      })
+
+      $("#pdcodecheck").hide();
+      $("#pdnamecheck").hide();
+      $("#unitcheck").hide();
+      $("#spcheck").hide();
+      $("#opcheck").hide();
+      $("#pdcheck").hide();
+      $("#dpcheck").hide();
+
+      // Keep track of selected images and their count
+      let selectedImages = [];
+      const maxImages = 5;
+      const maxImageSize = 1024 * 1024;
+
+      // When new images are selected
+      $('#myFiles').on('change', function () {
+
+        const files = $(this)[0].files;
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileSize = file.size;
+          if (fileSize > maxImageSize) {
+            alert('Image size should be less than 1MB');
+            continue;
+          }
+
+          if (selectedImages.length >= maxImages) {
+            alert('You can select only up to 5 images');
+            return;
+          }
+
+          selectedImages.push(file);
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const imagePreview = `<div class="image-container" >
+                                     <img src="${e.target.result}" alt="Image Preview" height="100" width="100">
+                                     <button class="btn-close" style="position:absolute"></button>
+                                  </div>`;
+            $('#image-preview').append(imagePreview);
+            $('#image-count').text(`${selectedImages.length}/${maxImages} images selected`);
+          };
+
+          reader.readAsDataURL(file);
+        }
+
+        $(this).val('');
+      });
+
+
+      // Open the edit modal and calculate the initial count
+      $('#EditModal').on('show.bs.modal', function () {
+        // Calculate and update the initial count of selected additional images
+        updateSelectedImagesCount();
+      });
+
+
+      // When a "Cancel" button is clicked
+      $(document).on('click', '.btn-close', function () {
+        const index = $(this).parent().index();
+        selectedImages.splice(index, 1);
+        $(this).parent().remove();
+        $('#image-count').text(`${selectedImages.length}/${maxImages} images selected`);
+      });
+
+      $('#btnsave').click(function () {
+
+        let id = $("#pdcode").val();
+
+        if (id.length == "") {
+          $("#pdcodecheck").show();
+
+          return
+        }
+
+        let name = $("#pdname").val();
+
+        if (name.length == "") {
+          $("#pdnamecheck").show();
+
+          return
+        }
+        let units = $("#units").val();
+
+        if (units.length == "") {
+          $("#unitcheck").show();
+
+          return
+        }
+        let sp = $("#sp").val();
+
+        if (sp.length == "") {
+          $("#spcheck").show();
+
+          return
+        }
+        let op = $("#op").val();
+
+        if (op.length == "") {
+          $("#opcheck").show();
+
+          return
+        }
+        let pd = $("#pd").val();
+
+        if (pd.length == "") {
+          $("#pdcheck").show();
+
+          return
+        }
+
+        let formData = new FormData(); // Create a FormData object
+
+        formData.append('pdcode', $('#pdcode').val());
+        formData.append('pdname', $('#pdname').val());
+        formData.append('units', $('#units').val());
+        formData.append('sp', $('#sp').val());
+        formData.append('op', $('#op').val());
+        formData.append('pd', $('#pd').val());
+        let dpFile = $('#myfile')[0].files[0];
+        formData.append('dp', dpFile);
+        //let files = $('#myFiles')[0].files;
+        //console.log(files);
+        for (let i = 0; i < selectedImages.length; i++) {
+          formData.append('myFiles[]', selectedImages[i]);
+        }
+        console.log(selectedImages);
+
+        //console.log(formData);
+        let text = "you want to add this data into database";
+
+        if (confirm(text) == true) {
+
+          $.ajax({
+            url: 'addimgproduct.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+
+              if (data = 1) {
+                //confirm("are you sure to add these?");
+                //alertify.success("data entered successfully");
+                //alert("data entered successfully");
+                location.reload();
+              }
+              else {
+                //alert("cancelled");
+              }
+            },
+
+          });
+        } else {
+          alert('Oops!!! you cancelled');
+        }
+      });
+
+      function loadData() {
+
+        $.ajax({
+          type: "post",
+          url: "dropdown.php",
+          dataType: 'JSON',
+
+          // dataType: "html",                  
+          success: function (data) {
+
+            for (let i = 0; i < data.length; i++) {
+              $('#units').append('<option class="units">' + data[i].unitname + '</option>');
+              //$('#units').append('<select class="units">'+data[i].unit+'</select>');
+
+            }
+          }
+        });
+      }
+
+      function getdata() {
+        $.ajax({
+          type: "POST",
+          url: "getimgproduct.php",
+          dataType: 'JSON',
+          success: function (response) {
+            let slno = 1;
+
+            $.each(response, function (key, value) {
+              console.log("Image filename:", value['image']);
+
+              $('.productimgmaster').append('<tr>' +
+                '<th scope="row" class="keycode" hidden="" >' + value['keycode'] + '</th>' +
+                '<td scope="row">' + slno + '</td>' +
+                '<td class="img"><img src="uploads/' + value['image'] + '" alt="Product Image" height="50"></td>' +
+                '<td class="productname">' + value['productname'] + '</td>' +
+                '<td class="unit">' + value['unit'] + '</td>' +
+                '<td class="sp">' + value['sellingprice'] + '</td>' +
+                '<td><button type="button" class="btn btn-primary edit_btn">Edit</button></td>' +
+                '<td><button type="button" class="btn btn-danger deletebtn">Delete</button></td>' +
+                '</tr>');
+              slno++;
+            });
+          }
+        });
+      }
+
+      // deleting data from the table
+      $(document).on("click", ".deletebtn", function () {
+        var keycode = $(this).closest('tr').find('.keycode').text();
+        let text = "you want to delete this data from database";
+        if (confirm(text) == true) {
+          $.ajax({
+            type: "POST",
+            url: "deleteimgproduct.php",
+            data: {
+              'keycode': keycode,
+            },
+            success: function (response) {
+              console.log(response);
+              if (response == 1) {
+                alertify.success('Data Deleted Successfully');
+                $('.productimgmaster').html('');
+                getdata();
+              }
+            }
+          });
+        } else {
+          alertify.error('Oops!!! you cancelled');
+        }
+      });
+
+      // search function
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#table tbody tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+
+      $('#EditModal').on('hidden.bs.modal', function () {
+        selectedImages = [];
+        existingImageCount = $('#edit_additional_image-preview .image-container').length;
+        updateSelectedImagesCount();
+      });
+
+
+      $(document).on("click", ".edit_btn", function () {
+        // Fetching data in edit_btn
+        var pn = $(this).closest('tr').find('.productname').text();
+        var unit = $(this).closest('tr').find('.unit').text();
+        var sp = $(this).closest('tr').find('.sp').text();
+        var dp = $(this).closest('tr').find('.img img').attr('src');
+        var keycode = $(this).closest('tr').find('.keycode').text();
+
+        $('#edit_name').val(pn);
+        $('#edit_unit').val(unit);
+        $('#edit_sp').val(sp);
+
+        // Set the src attribute of the display image element
+        $('#display_image_preview').attr('src', dp);
+        $('#keycode').val(keycode);
+        $('#edit_additional_image-preview').html('');
+        $('#edit_additional_image-count').text('0/5 images selected');
+
+        // Fetch and display additional images
+        var keycode = $('#keycode').val();
+
+        // AJAX request to fetch additional images
+        $.ajax({
+          url: 'fetchadditionalimg.php',
+          type: 'POST',
+          data: {
+            'keycode': keycode
+          },
+          dataType: 'json',
+          success: function (data) {
+            // Handle the retrieved additional images
+            if (data.length > 0) {
+              $.each(data, function (key, value) {
+                var additionalImageUrl = '/test/uploads/' + value['images'];
+                var additionalImagePreview = `<div class="image-container">
+                                                   <img src="${additionalImageUrl}" alt="Additional Image" height="100" width="100">
+                                                   <button class="btn-close remove-additional-image" style="position:absolute"></button>
+                                                   </div>`;
+                $('#edit_additional_image-preview').append(additionalImagePreview);
+              });
+
+              // Calculate the count of existing additional images
+              var existingImagesCount = data.length;
+
+              // Calculate the total count of selected images (including existing ones)
+              var totalSelectedImagesCount = existingImagesCount + selectedImagesEdit.length;
+              console.log("totalSelectedImagesCount:", totalSelectedImagesCount)
+
+              $('#edit_additional_image-count').text(`${totalSelectedImagesCount}/${maxImages} images selected`);
+            } else {
+              $('#edit_additional_image-count').text('No additional images added');
+            }
+          }
+        });
+
+        $.ajax({
+          url: 'fetch_existing_images.php',
+          method: 'POST',
+          data: { keycode: keycode },
+          dataType: 'json',
+          success: function (data) {
+            console.log("Response from fetch_existing_images.php:", data);
+            existingImages = data;
+            // Update the existingImagesCount variable here
+            existingImagesCount = existingImages.length;
+            // Now you can log the correct count
+            console.log("existingImagesCount:", existingImagesCount);
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching existing images: " + error);
+          },
+        });
+
+        $('#EditModal').modal('show');
+        updateSelectedImagesCount();
+
+      });
+      // Handle changing the display image
+      function loadeditData() {
+
+        $.ajax({
+          type: "post",
+          url: "dropdown.php",
+          dataType: 'JSON',
+
+          // dataType: "html",                  
+          success: function (data) {
+
+            for (let i = 0; i < data.length; i++) {
+              $('#edit_unit').append('<option class="units">' + data[i].unitname + '</option>');
+              //$('#units').append('<select class="units">'+data[i].unit+'</select>');
+
+            }
+          }
+        });
+      }
+
+      $('#edit_display_image').on('change', function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#display_image_preview').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(this.files[0]);
+      });
+
+
+      // Initialize the selectedImagesEdit array with existing images
+      const selectedImagesEdit = [];
+
+      // Add newly selected images to selectedImagesEdit when the user selects them
+      $('#edit-myFiles').on('change', function () {
+        const files = $(this)[0].files;
+
+        // Calculate the count of existing additional images
+        const existingImagesCount = selectedImagesEdit.length;
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileSize = file.size;
+          if (fileSize > maxImageSize) {
+            alert('Image size should be less than 1MB');
+            continue;
+          }
+
+          if (selectedImagesEdit.length >= maxImages) {
+            alert('You can select only up to 5 images');
+            return;
+          }
+
+
+          selectedImagesEdit.push(file);
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const imagePreview = `<div class="image-container">
+                              <img src="${e.target.result}" alt="Image Preview" height="100" width="100">
+                              <button class="btn-close remove-additional-image" style="position:absolute"></button>
+                            </div>`;
+            $('#edit_additional_image-preview').append(imagePreview);
+
+            // Calculate the total count of selected images
+            const selectedImagesCount = existingImagesCount + selectedImagesEdit.length;
+
+            if (selectedImagesCount > maxImages) {
+              alert('You can select only up to 5 images');
+              // Remove the last added image
+              selectedImagesEdit.pop();
+              $('#edit_additional_image-preview .image-container:last').remove();
+            } else {
+              $('#edit_additional_image-count').text(`${selectedImagesCount}/${maxImages} images selected`);
+            }
+          };
+
+          reader.readAsDataURL(file);
+        }
+
+        $(this).val('');
+      });
+
+      $('#edit_additional_image-preview').on("click", ".remove-additional-image", function () {
+        console.log("Remove image clicked");
+        var indexToRemove = $(this).closest(".image-container").index();
+        console.log("Index to remove:", indexToRemove);
+
+        // Check if the removed image is within the bounds of selectedImagesEdit
+        if (indexToRemove >= 0 && indexToRemove < selectedImagesEdit.length) {
+          // This is an additional image, mark it for deletion
+          var removedImage = selectedImagesEdit.splice(indexToRemove, 1)[0];
+          console.log("Removed image:", removedImage);
+          imagesToDelete.push(removedImage);
+          console.log("Images to Delete:", imagesToDelete);
+        } else if (indexToRemove >= selectedImagesEdit.length) {
+          // This is an existing image, mark it for deletion
+          var existingImage = existingImages.splice(indexToRemove - selectedImagesEdit.length, 1)[0];
+          console.log("Removed existing image:", existingImage);
+          imagesToDelete.push(existingImage);
+          existingImagesCount--; // Decrement the count of existing images
+          console.log("existingImagesCount:", existingImagesCount);
+        }
+
+        // Remove the image container from the preview
+        $(this).closest(".image-container").remove();
+
+        // Update the count of selected additional images
+        updateSelectedImagesCount();
+      });
+
+      function updateSelectedImagesCount() {
+        const selectedImagesCount = selectedImagesEdit.length + existingImagesCount;
+        $('#edit_additional_image-count').text(`${selectedImagesCount}/${maxImages} images selected`);
+      }
+
+      // In your editsave function
+      $('#editsave').click(function () {
+        alertify.confirm("Confirm update?", function () {
+          var formData = new FormData();
+
+          formData.append('productname', $('#edit_name').val());
+          formData.append('units', $('#edit_unit').val());
+          formData.append('sp', $('#edit_sp').val());
+          formData.append('keycode', $('#keycode').val());
+
+          var mainImageFile = $('#edit_display_image')[0].files[0];
+
+          // Check if a main display image file is selected
+          if (mainImageFile) {
+            formData.append('mainImage', mainImageFile);
+          }
+
+          // Add the existing images to delete
+          for (let i = 0; i < existingImages.length; i++) {
+            formData.append('existingImages[]', existingImages[i]);
+          }
+
+          // Add the images to delete
+          for (let i = 0; i < imagesToDelete.length; i++) {
+            formData.append('imagesToDelete[]', imagesToDelete[i]);
+          }
+
+          // Add the newly selected images
+          for (let i = 0; i < selectedImagesEdit.length; i++) {
+            formData.append('additionalImages[]', selectedImagesEdit[i]);
+          }
+
+          console.log("Images to Delete:", imagesToDelete);
+          console.log(imagesToDelete);
+          $.ajax({
+            url: 'updateimgproduct.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              //alert(data);
+              if (data == 1) {
+                // Data has been updated successfully
+              } else {
+                //alert('Something went wrong');
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+            }
+          });
+          alertify.success('Data updated.');
+        }, function () {
+          alertify.error('Cancelled!!!');
+        });
+      });
+
+    });
+  </script>
+
+
+
+</body>
+
+</html>

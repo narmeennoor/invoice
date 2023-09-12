@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <link rel="stylesheet" href="style.css">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" >
+    </head>
+    <body>
+        <div class="form">
+            <h2 style="color: black;">Login</h2>
+            <div class="input">
+            <p class="text-center" id="msg"></p>
+    <form id="loginForm" method="post">
+                <div class="inputBox" >
+                    <label for="" style="color: black;">Username</label>
+                    <input type="text" id="username" name="username" >
+                </div>
+                <div class="inputBox">
+                    <label for="" style="color: black;">Password</label>
+                    <input type="password"id="password" name="password">
+                </div>
+                <div class="inputBox" style="color: black;">
+                <input type="submit" class="btn btn-primary"></input>
+    </form> 
+                </div>
+            </div>
+            <p class="forgot"> <a href="#">Forgot Password?</a></p>
+            <p class="forgot">New user? <a href="register.html">Click Here</a></p>
+</form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script type="text/javascript">
+     $(document).on('submit',function(e){
+    e.preventDefault();
+    var username = $("#username").val();
+    var password = $("#password").val();
+    $.ajax({
+    method:"POST",
+    url: "login.php",
+    data:{
+        'username':username,
+        'password':password,
+    },
+    success: function(data){
+   
+    if(data === 'success') {
+    //alert("signed in successfully");
+        window.location.href="dashboard.html";
+    } else {
+        
+        $('#msg').html(data);
+       // $('#loginForm').find('input').val('')
+    }
+     
+}});
+localStorage.setItem("username", $("#username").val());
+            //localStorage.setItem("password", $("#password").val());
+            console.log("Items saved !")
+          
+});
+
+
+            </script>
+    
+</body>
+</html>

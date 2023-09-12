@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- bootsrap css -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <script src="http://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <!-- popper -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> -->
+    <!-- bootstrap js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="unitstyle.css" />
+
+    <script
+      src="https://kit.fontawesome.com/e30902090a.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- working code for auto complete start -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+    <!-- working code for autocomplete end -->
+
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"
+    />
+    <!-- Default theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"
+    />
+
+    <title>trying to put all php in one file</title>
+  </head>
+
+  <body>
+    <div id="navbar"></div>
+    <div class="container">
+      <button type="button" class="btn btn-primary" id="btnsave">Save</button>
+      <button type="button" class="btn btn-primary" id="btnmodify">
+        Modify
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnrefresh">
+        Refresh Page
+      </button>
+
+      <select
+        id="invoiceDropdownList"
+        class="dropdoownlist"
+        style="cursor: pointer"
+      >
+        <option value="0" style="cursor: pointer"></option>
+      </select>
+    </div>
+
+    <div class="containernew" style="display: flex">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="" class="col-form-label">Invoice No.</label>
+        </div>
+        <div class="col-auto">
+          <input
+            type="text"
+            id="invoice"
+            class="form-control"
+            value="1"
+            readonly
+          />
+          <!-- <iframe src="invoiceno.php" frameborder="0" scrolling="no" id="invoice" ></iframe> -->
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="" class="col-form-label">Invoice Date</label>
+        </div>
+        <div class="col-auto">
+          <input
+            type="date"
+            id="datepicker"
+            class="form-control box"
+            style="cursor: pointer"
+          />
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="" class="col-form-label">Customer Name</label><br />
+          <span id="namecheck" style="color: red"> **field is required </span>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="custname" class="form-control" />
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="" class="col-form-label">Mobile No.</label><br />
+          <span id="mobcheck" style="color: red"> **field is required </span>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="mobno" class="form-control" />
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="" class="col-form-label">Remarks</label>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="remark" class="form-control" />
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+
+    <table class="table table-bordered" id="table">
+      <thead>
+        <tr>
+          <th scope="col">Sl No.</th>
+          <th scope="col">Code</th>
+          <th scope="col">Description</th>
+          <th scope="col">Units</th>
+          <th scope="col">Rate</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody class="invoicemaster" id="invoicetable"></tbody>
+    </table>
+
+    <button class="add-row btn btn-primary">
+      <i class="fa-solid fa-plus"></i> Add row
+    </button>
+
+    <div class="row g-2 align-items-center justify-content-end">
+      <div class="col-auto">
+        <label for="" class="col-form-label">Net Total</label>
+      </div>
+      <div class="col-auto">
+        <input type="number" class="form-control" id="ntotal" readonly />
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        loadInvoiceNumber();
+        // loadSavedInvoiceNumbers()
+        $("#namecheck").hide();
+        $("#mobcheck").hide();
+        $("#btnmodify").hide();
+        productArr = [];
+        loadData();
+        let innerarray = [];
+        let innerarray1 = [];
+
+        //function to add row
+        let lineNo = 1;
+
+        $(".add-row").click(function () {
+          var rowCount = $("#table tbody tr").length + 1;
+          markup =
+            "<tr><td>" +
+            rowCount +
+            '</td><td><input type="text" id="code' +
+            rowCount +
+            '" class="auto" autocomplete="off"></td><td></td><td id="unit"></td><td class="rate" ></td><td><input type="text" class="qty" ></td><td class="total"></td><td>\
+<i class="fa-solid fa-plus prependrow" style="cursor: pointer;"id="addbtn"></i> <i class="fa-solid fa-trash" id="deleterow" style="cursor: pointer;"></i></td></tr>';
+          $("#table tbody").append(markup);
+          //alert(rowCount);
+          updateNetTotal();
+          lineNo++;
+        });
+
+        //deleting a particular row function
+        $("#table").on("click", "#deleterow", function () {
+          $(this).closest("tr").remove();
+          const rows = document.querySelectorAll("tbody tr");
+          rows.forEach(function (row, index) {
+            row.querySelector("td:first-child").textContent = index + 1;
+            row.setAttribute("data-rowid", index + 1);
+            updateNetTotal();
+          });
+        });
+
+        //prepending row
+        $("#table").on("click", ".prependrow", function () {
+          console.log("Clicked!");
+          var rowCount = $("#table tbody tr").length + 1;
+          var markup =
+            "<tr><td>" +
+            rowCount +
+            '</td><td><input type="text" id="code' +
+            rowCount +
+            '" class="auto"></td><td></td><td id="unit"></td><td class="rate" ></td><td><input type="text" class="qty" ></td><td class="total"></td><td>\
+<i class="fa-solid fa-plus prependrow"  style="cursor: pointer;"id="addbtn"></i> <i class="fa-solid fa-trash" id="deleterow" style="cursor: pointer;"></i></td></tr>';
+          var $currentRow = $(this).closest("tr");
+          $currentRow.before(markup);
+          updateSLNos();
+          updateNetTotal();
+        });
+
+        //update slno when deleted or added
+        function updateSLNos() {
+          const rows = $("#table tbody tr");
+          rows.each(function (index) {
+            $(this)
+              .find("td:first-child")
+              .text(index + 1);
+          });
+        }
+
+        // function auto complete for code start
+        function ManageBoxAutoComplete(id) {
+          $(".auto").autocomplete({
+            source: innerarray,
+            select: function (event, ui) {
+              updateTableRow(ui.item.value, getDetailByCode(ui.item.value));
+            },
+          });
+        }
+
+        $(".invoicemaster").on("change", ".auto", function () {
+          var selectedValue = $(this).val();
+          updateTableRow(selectedValue, getDetailByCode(selectedValue));
+        });
+
+        function getDetailByCode(code) {
+          return productArr.find((item) => item.productcode === code) || null;
+        }
+
+        function updateTableRow(selectedValue, detail) {
+          console.log("Selected Value:", selectedValue);
+          console.log("Product Details:", detail);
+          if (detail) {
+            var $row = $("#table tbody tr").filter(function () {
+              var columnValue = $(this).find("td:eq(1) input").val();
+              console.log("Row Content:", columnValue);
+              return columnValue === selectedValue;
+            });
+
+            if ($row.length > 0) {
+              console.log("Row Found:", $row);
+              $row.find("td:eq(2)").text(detail.productname);
+              $row.find("td:eq(3)").text(detail.unit);
+              $row.find("td:eq(4)").text(detail.rate);
+            }
+          } else {
+            alert("Details not found.");
+          }
+        }
+
+        $(".invoicemaster").on("keypress", ".auto", function () {
+          var id = $(this).attr("id");
+          ManageBoxAutoComplete(id);
+        });
+
+        // function auto complete for code end
+
+        // function auto complete for description start
+        // function ManageBoxAutoComplete1(id) {
+        //     $(".pname").autocomplete({
+        //         source: innerarray1
+        //     });
+        // }
+
+        // $('.invoicemaster').on('keyup', '.pname', function () {
+
+        //     var id = $(this).attr('id');
+
+        //     ManageBoxAutoComplete1(id);
+        // });
+        // function auto complete for description end
+
+        //function to load/fetch data
+        function loadData() {
+          $.ajax({
+            url: "invoiceautocomplete.php",
+            data: { action: "fetchdata" },
+            type: "post",
+            dataType: "json",
+            // data:{action:'fetchdata'},
+            success: function (response) {
+              $.each(response, function (key, val) {
+                innerarray.push(val.productcode);
+                innerarray1.push(val.productname);
+              });
+
+              console.log(innerarray);
+              // console.log(innerarray1)
+              productArr = response;
+              // console.log(productArr);
+            },
+          });
+        }
+
+        //date pattern
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, "0");
+        var todaydate = String(date.getDate()).padStart(2, "0");
+        var datepattern = year + "-" + month + "-" + todaydate;
+        document.getElementById("datepicker").value = datepattern;
+
+        //total column calculation
+        $("tbody").on("change", ".qty", function () {
+          var $row = $(this).closest("tr");
+          var rate = $row.find(".rate").text();
+          if (rate.trim() !== "") {
+            var quantity = parseFloat($(this).val()) || 0;
+            var total = rate * quantity;
+            console.log(total);
+            // updateNetTotal();
+            $row.find(".total").text(total.toFixed(2));
+            updateNetTotal();
+          } else {
+            alert("enter rate!");
+          }
+        });
+
+        //saving data to invoice head
+        $("#btnsave").click(function () {
+          let name = $("#custname").val();
+
+          if (name.length == "") {
+            $("#namecheck").show();
+
+            return;
+          }
+
+          let mob = $("#mobno").val();
+
+          if (mob.length == "") {
+            $("#mobcheck").show();
+
+            return;
+          }
+
+          let invoiceData = {
+            jsonData: [],
+          };
+
+          $("#table tbody tr").each(function () {
+            let rowData = {
+              Code: $(this).find("td:eq(1) input").val(),
+              Description: $(this).find("td:eq(2)").text(),
+              Units: $(this).find("td:eq(3)").text(),
+              Rate: $(this).find("td:eq(4)").text(),
+              Quantity: $(this).find(".qty").val(),
+              Total: $(this).find("td:eq(6)").text(),
+            };
+            invoiceData.jsonData.push(rowData);
+          });
+          console.log(JSON.stringify(invoiceData));
+          alertify.confirm(
+            "Confirm?",
+            function () {
+              $.ajax({
+                url: "invoiceautocomplete.php",
+                type: "POST",
+                data: {
+                    action:'addhead',
+                  invoice: $("#invoice").val(),
+                  datepicker: $("#datepicker").val(),
+                  custname: $("#custname").val(),
+                  mobno: $("#mobno").val(),
+                  remark: $("#remark").val(),
+                  ntotal: $("#ntotal").val(),
+                  jsonData: JSON.stringify(invoiceData.jsonData), // JSON encode the array
+                },
+                success: function (data) {
+                  if (data == 1) {
+                    // Data Added Successfully
+                    alert("Data inserted successfully");
+                    location.reload();
+                  } else {
+                    // Handle error
+                    console.log("Error:", data);
+                  }
+                },
+              });
+              alertify.success("Data saved");
+            },
+            function () {
+              alertify.error("Cancelled");
+            }
+          );
+        });
+
+        //To get the nettotal of all the products
+        function updateNetTotal() {
+          var netTotal = 0;
+          //console.log(netTotal)
+          $("tbody tr").each(function () {
+            var totalValue = parseFloat($(this).find(".total").text());
+            // console.log(totalValue);
+            if (!isNaN(totalValue)) {
+              netTotal = netTotal + totalValue;
+              // console.log(netTotal);
+            }
+          });
+          console.log("Calculated netTotal:", netTotal);
+          $("#ntotal").val(netTotal.toFixed(2));
+        }
+
+        // to get the invoice number on page load
+        function loadInvoiceNumber() {
+          $.ajax({
+            url: "invoiceno.php",
+            success: function (data) {
+              $("#invoice").val(data);
+            },
+          });
+        }
+        //loading navbar
+        $(function () {
+          $("#navbar").load("menu.html");
+        });
+
+        //ajax to get saved invoices
+        $.ajax({
+          type: "GET",
+          url: "fetchSavedInvoices.php",
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+
+            var $invoiceDropdownList = $("#invoiceDropdownList");
+
+            $invoiceDropdownList.empty();
+
+            $invoiceDropdownList.append(
+              $("<option>", {
+                value: "",
+                text: "Saved invoices",
+                disabled: true,
+                selected: true,
+              })
+            );
+
+            response.forEach(function (invoice) {
+              $invoiceDropdownList.append(
+                $("<option>", {
+                  value: invoice.invoiceno,
+                  text: invoice.invoiceno,
+                })
+              );
+              //  $('#btnmodify').hide();
+            });
+            $invoiceDropdownList.on("change", function () {
+              var selectedInvoice = $(this).val();
+              if (selectedInvoice !== "") {
+                $("#btnmodify").show();
+                $("#btnsave").hide();
+              } else {
+                $("#btnmodify").hide();
+                $("#btnsave").show();
+              }
+            });
+          },
+          error: function (error) {
+            console.error("Error fetching saved invoices:", error);
+          },
+        });
+
+        $("#invoiceDropdownList").change(function () {
+          var selectedInvoiceNumber = $(this).val();
+
+          $.ajax({
+            type: "GET",
+            url: "fetchInvoiceHead.php",
+            data: { invoiceno: selectedInvoiceNumber },
+            dataType: "json",
+            success: function (response) {
+              var formattedInvoiceDate = response.invoicedate;
+              $("#datepicker").val(formattedInvoiceDate);
+              $("#invoice").val(response.invoiceno);
+              $("#datepicker").val(response.invoicedate);
+              $("#custname").val(response.custname);
+              $("#mobno").val(response.mobileno);
+              $("#remark").val(response.remarks);
+              $("#ntotal").val(response.nettotal);
+            },
+          });
+
+          $.ajax({
+            type: "POST",
+            url: "fetchInvoiceDetails.php",
+            data: { invoiceNumber: selectedInvoiceNumber },
+            dataType: "json",
+            success: function (response) {
+              $("#invoicetable").empty();
+              $.each(response, function (index, detail) {
+                var newRow =
+                  "<tr>" +
+                  "<td>" +
+                  detail.lno +
+                  "</td>" +
+                  '<td><input type="text" class="auto" value="' +
+                  detail.code +
+                  '"></td>' +
+                  "<td>" +
+                  detail.pdesc +
+                  "</td>" +
+                  "<td>" +
+                  detail.unit +
+                  "</td>" +
+                  '<td class="rate">' +
+                  detail.rate +
+                  "</td>" +
+                  '<td><input type="text" class="qty" value="' +
+                  detail.qty +
+                  '"></td>' +
+                  '<td class="total">' +
+                  detail.total +
+                  "</td>" +
+                  '<td><i class="fa-solid fa-plus prependrow" style="cursor: pointer;"></i> <i class="fa-solid fa-trash" id="deleterow" style="cursor: pointer;"></i></td>' +
+                  "</tr>";
+
+                $("#invoicetable").append(newRow);
+                var rate = parseFloat(detail.rate);
+                var quantity = parseFloat(detail.qty);
+                var total = rate * quantity;
+                $("#invoicetable tr:last .total").text(total.toFixed(2));
+              });
+
+              updateNetTotal();
+            },
+
+            error: function (error) {
+              console.error("Error fetching invoice details:", error);
+            },
+          });
+        });
+
+        //to  save the modified data
+        $("#btnmodify").click(function () {
+          let name = $("#custname").val();
+
+          if (name.length == "") {
+            $("#namecheck").show();
+
+            return;
+          }
+
+          let mob = $("#mobno").val();
+
+          if (mob.length == "") {
+            $("#mobcheck").show();
+
+            return;
+          }
+
+          let invoiceData = {
+            jsonData: [],
+          };
+
+          $("#table tbody tr").each(function () {
+            let rowData = {
+              Code: $(this).find("td:eq(1) input").val(),
+              Description: $(this).find("td:eq(2)").text(),
+              Units: $(this).find("td:eq(3)").text(),
+              Rate: $(this).find("td:eq(4)").text(),
+              Quantity: $(this).find(".qty").val(),
+              Total: $(this).find("td:eq(6)").text(),
+            };
+            invoiceData.jsonData.push(rowData);
+          });
+
+          alertify.confirm(
+            "confirm?.",
+            function () {
+              $.ajax({
+                url: "modifyhead.php",
+                type: "POST",
+                data: {
+                  invoice: $("#invoice").val(),
+                  datepicker: $("#datepicker").val(),
+                  custname: $("#custname").val(),
+                  mobno: $("#mobno").val(),
+                  remark: $("#remark").val(),
+                  ntotal: $("#ntotal").val(),
+                  jsonData: JSON.stringify(invoiceData.jsonData),
+                },
+                success: function (response) {
+                  if (response === "1") {
+                    alert("Data modified successfully.");
+                    location.reload();
+                  } else {
+                    alert("Error modifying data.");
+                  }
+                },
+                error: function (error) {
+                  console.error("Error modifying data:", error);
+                },
+              });
+
+              alertify.success("Data saved");
+            },
+            function () {
+              alertify.error("Cancelled");
+            }
+          );
+        });
+
+        //btn refresh function to reload page
+        $("#btnrefresh").click(function () {
+          location.reload();
+        });
+      });
+    </script>
+  </body>
+</html>
